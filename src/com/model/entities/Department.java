@@ -26,6 +26,10 @@ public class Department implements Serializable, ImplementOperations {
 		conn = DB.getConnection();
 	}
 
+	public Department(String name) {
+		this.setName(name);
+	}
+
 	public Department(Integer id, String name) {
 
 		this.setId(id);
@@ -85,7 +89,30 @@ public class Department implements Serializable, ImplementOperations {
 
 	@Override
 	public void insert(Object obj) {
-		// TODO Auto-generated method stub
+
+		
+		PreparedStatement pst = null;
+
+		try {
+
+			
+			pst = conn.prepareStatement("insert into department (Name) values (?)");
+
+			pst.setString(1,obj.toString());
+			int rowsaffect = pst.executeUpdate();
+
+			if (rowsaffect > 0) {
+
+				System.out.printf("Done! %d rows affected.", rowsaffect);
+			}
+
+		} catch (SQLException e) {
+
+			throw new DbException(e.getMessage());
+		} finally {
+
+			DB.closeConnection();
+		}
 
 	}
 
