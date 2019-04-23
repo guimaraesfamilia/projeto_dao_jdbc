@@ -12,13 +12,17 @@ public class Program {
 		
 		Scanner sc = new Scanner(System.in);
 		
-		ImplementOperations iop = FactoryDao.createSeller();
+		ImplementOperations iop = FactoryDao.createDepartment();
 		
 		
-		System.out.print("Enter Id seller.: ");
+		System.out.print("Enter Id Department.: ");
 		int id = sc.nextInt();
 		
+		System.out.println();
+		System.out.println("Information of Deparment.:");
+		System.out.println();
 		System.out.println(iop.findById(id));
+		
 
 	}
 

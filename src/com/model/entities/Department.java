@@ -75,7 +75,12 @@ public class Department implements Serializable, ImplementOperations {
 
 	@Override
 	public String toString() {
-		return "Department [id=" + id + ", name=" + name + "]";
+
+		StringBuilder sb = new StringBuilder();
+		sb.append("ID.: " + this.getId() + "\n");
+		sb.append("Name.: " + this.getName().toUpperCase() + "\n");
+
+		return sb.toString();
 	}
 
 	@Override
@@ -104,7 +109,7 @@ public class Department implements Serializable, ImplementOperations {
 
 		try {
 
-			pst = conn.prepareStatement("select department.Name as DepName from department where department.Id = ?");
+			pst = conn.prepareStatement("select * from department where department.Id = ?");
 
 			pst.setInt(1, id);
 			rs = pst.executeQuery();
@@ -112,8 +117,10 @@ public class Department implements Serializable, ImplementOperations {
 			if (rs.next()) {
 
 				Department obj = new Department();
+
 				obj.setId(rs.getInt("Id"));
 				obj.setName(rs.getString("Name"));
+
 				return obj;
 			}
 			return null;
