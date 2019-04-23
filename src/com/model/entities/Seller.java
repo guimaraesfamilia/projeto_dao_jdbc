@@ -3,16 +3,25 @@ package com.model.entities;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.List;
 
 import com.model.db.DB;
+import com.model.db.DbException;
+import com.model.implement.ImplementOperations;
+import com.mysql.cj.protocol.Resultset;
 
-public class Seller implements Serializable {
+public class Seller implements Serializable, ImplementOperations {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
+	private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 	private Connection conn = null;
 	private Integer id;
 	private String name;
@@ -27,8 +36,7 @@ public class Seller implements Serializable {
 	}
 
 	public Seller(Integer id, String name, String email, Date birthdate, Double basesalary, Department department) {
-		
-		
+
 		this.setId(id);
 		this.setName(name);
 		this.setEmail(email);
@@ -112,9 +120,85 @@ public class Seller implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Seller [id=" + id + ", name=" + name + ", email=" + email + ", birthdate=" + birthdate + ", basesalary="
-				+ basesalary + ", department=" + department + "]";
+
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("ID.: " + this.getId() + "\n");
+		sb.append("Name.: " + this.getName() + "\n");
+		sb.append("Email.: " + this.getEmail() + "\n");
+		sb.append("BirthDate.: " + sdf.format(this.getBirthdate()) + "\n");
+		sb.append("Base Salary.: " + String.format("%.2f", this.getBasesalary()) + "\n");
+		sb.append("Department.: " + this.getDepartment().getName() + "\n");
+
+		return sb.toString();
 	}
 
-	
+	@Override
+	public void insert(Object obj) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void update(Object obj) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void deleteById(int id) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public Object findById(int id) {
+
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+
+		try {
+
+			pst = conn.prepareStatement(
+					"select seller.* , department.Name as DepName from seller inner join department on seller.DepartmentId = department.Id where seller.Id = ?");
+
+			pst.setInt(1, id);
+
+			rs = pst.executeQuery();
+
+			if (rs.next()) {
+
+				Department dep = new Department();
+				dep.setId(rs.getInt("Id"));
+				dep.setName(rs.getString("DepName"));
+
+				Seller obj = new Seller();
+				obj.setId(rs.getInt("Id"));
+				obj.setName(rs.getString("Name"));
+				obj.setEmail(rs.getString("Email"));
+				obj.setBirthdate(rs.getDate("BirthDate"));
+				obj.setBasesalary(rs.getDouble("BaseSalary"));
+				obj.setDepartment(dep);
+				return obj;
+
+			}
+			return null;
+
+		} catch (SQLException e) {
+
+			throw new DbException(e.getMessage());
+		} finally {
+
+			DB.closePrepareStatement(pst);
+			DB.closeResultSet(rs);
+		}
+
+	}
+
+	@Override
+	public List<Object> findAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
