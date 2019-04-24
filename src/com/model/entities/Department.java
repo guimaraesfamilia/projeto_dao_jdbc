@@ -103,7 +103,7 @@ public class Department implements Serializable, ImplementOperations {
 
 			if (rowsaffect > 0) {
 
-				System.out.printf("Done! %d rows affected.", rowsaffect);
+				System.out.printf(" Done! %d rows affected.", rowsaffect);
 			}
 
 		} catch (SQLException e) {
@@ -118,7 +118,8 @@ public class Department implements Serializable, ImplementOperations {
 
 	@Override
 	public void update(Object obj) {
-		// TODO Auto-generated method stub
+		
+		
 
 	}
 

@@ -123,12 +123,12 @@ public class Seller implements Serializable, ImplementOperations {
 
 		StringBuilder sb = new StringBuilder();
 
-		sb.append("ID.: " + this.getId() + "\n");
-		sb.append("Name.: " + this.getName() + "\n");
-		sb.append("Email.: " + this.getEmail() + "\n");
-		sb.append("BirthDate.: " + sdf.format(this.getBirthdate()) + "\n");
-		sb.append("Base Salary.: " + String.format("%.2f", this.getBasesalary()) + "\n");
-		sb.append("Department.: " + this.getDepartment().getName() + "\n");
+		sb.append(" ID.: " + this.getId() + "\n");
+		sb.append(" Name.: " + this.getName() + "\n");
+		sb.append(" Email.: " + this.getEmail() + "\n");
+		sb.append(" BirthDate.: " + sdf.format(this.getBirthdate()) + "\n");
+		sb.append(" Base Salary.: " + String.format("%.2f", this.getBasesalary()) + "\n");
+		sb.append(" Department.: " + this.getDepartment().getName() + "\n");
 
 		return sb.toString();
 	}
@@ -168,17 +168,10 @@ public class Seller implements Serializable, ImplementOperations {
 
 			if (rs.next()) {
 
-				Department dep = new Department();
-				dep.setId(rs.getInt("Id"));
-				dep.setName(rs.getString("DepName"));
+				Department dp = instancietDepartment(rs);
 
-				Seller obj = new Seller();
-				obj.setId(rs.getInt("Id"));
-				obj.setName(rs.getString("Name"));
-				obj.setEmail(rs.getString("Email"));
-				obj.setBirthdate(rs.getDate("BirthDate"));
-				obj.setBasesalary(rs.getDouble("BaseSalary"));
-				obj.setDepartment(dep);
+				Seller obj = instancieSeller(rs, dp);
+
 				return obj;
 
 			}
@@ -193,6 +186,28 @@ public class Seller implements Serializable, ImplementOperations {
 			DB.closeResultSet(rs);
 		}
 
+	}
+
+	private Department instancietDepartment(ResultSet rs) throws SQLException {
+
+		Department dp = new Department();
+		dp.setId(rs.getInt("Id"));
+		dp.setName(rs.getString("DepName"));
+
+		return dp;
+	}
+
+	private Seller instancieSeller(ResultSet rs, Department dp) throws SQLException {
+
+		Seller obj = new Seller();
+		obj.setId(rs.getInt("Id"));
+		obj.setName(rs.getString("Name"));
+		obj.setEmail(rs.getString("Email"));
+		obj.setBirthdate(rs.getDate("BirthDate"));
+		obj.setBasesalary(rs.getDouble("BaseSalary"));
+		obj.setDepartment(dp);
+
+		return obj;
 	}
 
 	@Override

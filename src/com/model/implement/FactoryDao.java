@@ -5,7 +5,9 @@ import com.model.entities.Seller;
 
 public class FactoryDao {
 
+
 	
+
 	public static Seller createSeller() {
 		
 		return new Seller();
